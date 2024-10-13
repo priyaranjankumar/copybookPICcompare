@@ -1,0 +1,38 @@
+   01  SHIRE.
+       05 SHIRE-KEY.
+        10 SHIRE-NAME           PIC X(20).
+       05 SHIRE-TYPE            PIC X(1).
+            88 SHIRETYPE-SHIRE  VALUE '0'.
+            88 SHIRETYPE-TOWN   VALUE '1'.
+            88 SHIRETYPE-CITY   VALUE '2'.
+       05 SHIRE-CODE1           PIC 999.
+       05 SHIRE-CODE2           PIC 999.
+       05 SHIRE-ROAD            PIC S9(15) COMP-3.
+       05 SHIRE-RIVER           PIC S9(15) COMP-3.
+       05 SHIRE-BRIDGE          PIC S9(15) COMP-3.
+   01  SHIRE-TOWN.
+       05 SHIRE-KEY.
+        10 SHIRE-NAME           PIC XXXXXXXXXXXXXXXXXXXXXXXXXX.
+       05 SHIRE-TYPE            PIC X(1).
+            88 SHIRETYPE-SHIRE  VALUE '0'.
+            88 SHIRETYPE-TOWN   VALUE '1'.
+            88 SHIRETYPE-CITY   VALUE '2'.
+              05 SHIRE-CODE1           PIC 9(3).
+       05 SHIRE-CODE2           PIC 9(5).
+       05 SHIRE-YEAR            PIC 9(4) COMP.
+       05 SHIRE-BRICK           PIC S9(15) COMP-3.
+       05 SHIRE-WOODEN          PIC S9(15) COMP-3.
+       05 SHIRE-SCHOOL          PIC S9(7) COMP-3.
+       05 SHIRE-GOLF            PIC S9(4) COMP.
+   01  SHIRE-CITY.
+       05 SHIRE-KEY.
+        10 SHIRE-NAME           PIC X(20).
+       05 SHIRE-TYPE            PIC X(1).
+            88 SHIRETYPE-SHIRE  VALUE '0'.
+            88 SHIRETYPE-TOWN   VALUE '1'.
+            88 SHIRETYPE-CITY   VALUE '2'.
+       05 SHIRE-CODE1           PIC 9(3).
+       05 SHIRE-CODE2           PIC 9(5).
+       05 SHIRE-MAJOR           PIC S9(4) COMP.
+       05 SHIRE-MAIN-ATTRACTION PIC X(20).
+       05 SHIRE-MINOR           PIC S9(4) COMP.

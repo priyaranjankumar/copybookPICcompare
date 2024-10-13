@@ -6,10 +6,10 @@
    The results file will have a header which includes total number of matched or unmatched.
 */
 
-inputFile1 = '/home/ranjan/code/test/file1.txt'
-inputFile2 = '/home/ranjan/code/test/file2.txt'
-matchedFile = '/home/ranjan/code/test/matched.txt'
-unmatchedFile = '/home/ranjan/code/test/unmatched.txt'
+inputFile1 = 'file1.txt'
+inputFile2 = 'file2.txt'
+matchedFile = 'matched.txt'
+unmatchedFile = 'unmatched.txt'
 
 matchedCount = 0
 unmatchedCount = 0
@@ -149,7 +149,7 @@ compareAndWrite: procedure expose lines1. lines2. values1. values2. matchedFile 
     value1 = values1.i
     value2 = values2.i
     /* say value1 ' <> ' value2 */
-    say 'Comparing:' value1 ' <> ' value2
+    /* say 'Comparing:' value1 ' <> ' value2 */
        /* Format lines1 and lines2 to be exactly 80 characters wide */
     formattedLine1 = left(lines1.i, 80)  /* Adjust left alignment */
     formattedLine2 = left(lines2.i, 80)  /* Adjust left alignment */
