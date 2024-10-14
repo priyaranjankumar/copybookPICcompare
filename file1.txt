@@ -1,7 +1,9 @@
    01  SHIRE.
        05 SHIRE-KEY.
         10 SHIRE-NAME           PIC X(20).
-       05 SHIRE-TYPE            PIC X(1).
+      *10 SHIRE-NAME           PIC X(20).
+       05 SHIRE-TYPE            
+       PIC X(1).
             88 SHIRETYPE-SHIRE  VALUE '0'.
             88 SHIRETYPE-TOWN   VALUE '1'.
             88 SHIRETYPE-CITY   VALUE '2'.

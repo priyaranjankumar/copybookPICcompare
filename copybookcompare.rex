@@ -10,6 +10,7 @@ inputFile1 = 'file1.txt'
 inputFile2 = 'file2.txt'
 matchedFile = 'matched.txt'
 unmatchedFile = 'unmatched.txt'
+skippedFile= 'skipped.txt'
 
 matchedCount = 0
 unmatchedCount = 0
@@ -38,41 +39,105 @@ call addFooter unmatchedFile, 'Total Unmatched Lines: ' || unmatchedCount
 
 exit
 
-readFile1: procedure expose lines1.
+/* read file 1 */
+readFile1: procedure expose lines1. combinedLine
   parse arg fileName, lines1
   if stream(fileName, 'C', 'QUERY EXISTS') = '' then do
     say 'Error: Unable to open file' fileName
     return 0
   end
   i = 0
+  combinedLine = ''
   do while lines(fileName)
     line = linein(fileName)
+    if index(line,'*')=7 then do 
+    say 'Skipping line with comments: 'line
+    call lineout skippedFile, fileName || line
+    iterate
+    end
+    if pos('.', line) > 0 & pos('PIC', line) = 0 then do
+      /* say 'Skipping line with period but no PIC clause: ' line */
+      iterate
+    end
     if pos('PIC', line) > 0 then do
-      i = i + 1
-      lines1.i =line
+      /* say 'Inside First IF: ' line  */
+      if combinedLine \= '' then do
+        combinedLine = combinedLine || ' ' || line
+        /* say 'Inside Nested IF: combinedLine' */
+        i = i + 1
+        lines1.i = combinedLine
+        /* say 'Inside Nested IF: ' combinedLine */
+        combinedLine = ''
+      end
+      else do
+        i = i + 1
+        lines1.i = line
+      end
+    end
+    else do
+      combinedLine = combinedLine || ' ' || line
+      /* say 'Inside else: ' combinedLine */
     end
   end
-  call lineout fileName
+  if combinedLine \= '' then do
+    i = i + 1
+    lines1.i = combinedLine
+  end
+  call stream fileName, 'C', 'CLOSE'
   if i = 0 then
     say 'No lines containing PIC found in' fileName
   else
     say 'Lines containing PIC from' fileName ':' i
 return i
-readFile2: procedure expose lines2.
-  parse arg fileName, lines
+
+
+
+/* read file 2*/
+
+readFile2: procedure expose lines2. combinedLine
+  parse arg fileName, lines2
   if stream(fileName, 'C', 'QUERY EXISTS') = '' then do
     say 'Error: Unable to open file' fileName
     return 0
   end
   i = 0
+  combinedLine = ''
   do while lines(fileName)
     line = linein(fileName)
+    if index(line,'*')=7 then do 
+    say 'Skipping line with comments: 'line
+    call lineout skippedFile, line
+    iterate
+    end
+    if pos('.', line) > 0 & pos('PIC', line) = 0 then do
+      /* say 'Skipping line with period but no PIC clause: ' line */
+      iterate
+    end
     if pos('PIC', line) > 0 then do
-      i = i + 1
-      lines2.i = line
+      /* say 'Inside First IF: ' line  */
+      if combinedLine \= '' then do
+        combinedLine = combinedLine || ' ' || line
+        /* say 'Inside Nested IF: combinedLine' */
+        i = i + 1
+        lines2.i = combinedLine
+        /* say 'Inside Nested IF: ' combinedLine */
+        combinedLine = ''
+      end
+      else do
+        i = i + 1
+        lines2.i = line
+      end
+    end
+    else do
+      combinedLine = combinedLine || ' ' || line
+      /* say 'Inside else: ' combinedLine */
     end
   end
-  call lineout fileName
+  if combinedLine \= '' then do
+    i = i + 1
+    lines2.i = combinedLine
+  end
+  call stream fileName, 'C', 'CLOSE'
   if i = 0 then
     say 'No lines containing PIC found in' fileName
   else
