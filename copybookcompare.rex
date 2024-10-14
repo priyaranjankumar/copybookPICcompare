@@ -10,11 +10,9 @@ inputFile1 = 'file1.txt'
 inputFile2 = 'file2.txt'
 matchedFile = 'matched.txt'
 unmatchedFile = 'unmatched.txt'
-skippedFile= 'skipped.txt'
-
+skippedFile = 'skipped.txt'
 matchedCount = 0
 unmatchedCount = 0
-
 /* Read files and extract lines with 'PIC' */
 lines1Count = readFile1(inputFile1, 'lines1.')
 lines2Count = readFile2(inputFile2, 'lines2.') 
@@ -26,21 +24,16 @@ call addHeader matchedFile, 'File 1 Variable                                    
 call addHeader unmatchedFile, 'File 1 Variable                                                                         File 2 Variable                                                                    '
 call addHeader matchedFile, '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
 call addHeader unmatchedFile, '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
-
 /* Compare values and write to output files */
 call compareAndWrite values1Count
-
-
 /* Add Footer to output files */
 call addHeader matchedFile, '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
 call addHeader unmatchedFile, '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
 call addFooter matchedFile, 'Total Matched Lines: ' || matchedCount
 call addFooter unmatchedFile, 'Total Unmatched Lines: ' || unmatchedCount
-
 exit
-
 /* read file 1 */
-readFile1: procedure expose lines1. combinedLine
+readFile1: procedure expose lines1. combinedLine skippedFile
   parse arg fileName, lines1
   if stream(fileName, 'C', 'QUERY EXISTS') = '' then do
     say 'Error: Unable to open file' fileName
@@ -89,12 +82,8 @@ readFile1: procedure expose lines1. combinedLine
   else
     say 'Lines containing PIC from' fileName ':' i
 return i
-
-
-
 /* read file 2*/
-
-readFile2: procedure expose lines2. combinedLine
+readFile2: procedure expose lines2. combinedLine skippedFile
   parse arg fileName, lines2
   if stream(fileName, 'C', 'QUERY EXISTS') = '' then do
     say 'Error: Unable to open file' fileName
@@ -143,7 +132,6 @@ readFile2: procedure expose lines2. combinedLine
   else
     say 'Lines containing PIC from' fileName ':' i
 return i
-
 extractAndNormalizePICValues1: procedure expose lines1. values1.
   parse arg inputStem, inputCount, outputStem
   do i = 1 to inputCount
@@ -151,6 +139,7 @@ extractAndNormalizePICValues1: procedure expose lines1. values1.
     picPos = pos('PIC', line)
     if picPos > 0 then do
       value = substr(line, picPos + 4)
+      longValue1= value
       /* say 'Value:1 before strip:' value */
       /* Find the position of the first space or period */
       spacePos = pos(' ', value)
@@ -165,11 +154,15 @@ extractAndNormalizePICValues1: procedure expose lines1. values1.
       value = substr(value, 1, minPos - 1)
       /* say 'Value:1 before normalize:' value */
       value = normalizePIC(value)
+      if( pos('COMP',line) > 0) then do
+      
+      value = value || substr(longValue1,minPos,length(line)-1)
+      say "value: " value
+      end
       values1.i = value
     end
   end
 return inputCount
-
 extractAndNormalizePICValues2: procedure expose lines2. values2.
   parse arg inputStem, inputCount, outputStem
   do i = 1 to inputCount
@@ -177,6 +170,7 @@ extractAndNormalizePICValues2: procedure expose lines2. values2.
     picPos = pos('PIC', line)
     if picPos > 0 then do
       value = substr(line, picPos + 4)
+      longValue2= value
       /* say 'Value:2 before strip:' value */
       /* Find the position of the first space or period */
       spacePos = pos(' ', value)
@@ -191,11 +185,15 @@ extractAndNormalizePICValues2: procedure expose lines2. values2.
       value = substr(value, 1, minPos - 1)
       /* say 'Value:2 before normalizePIC' value */
       value = normalizePIC(value)
+      if( pos('COMP',line) > 0) then do
+      
+      value = value || substr(longValue2,minPos,length(line)-1)
+      say "value: " value
+      end
       values2.i = value
     end
   end
 return inputCount
-
 normalizePIC: procedure
   parse arg value
   if pos('(', value) > 0 then do
@@ -205,9 +203,10 @@ normalizePIC: procedure
       value = copies('9', count)
     else if prefix = 'X' then
       value = copies('X', count)
+    else if prefix = 'S9' then
+      value= 'S' || copies('9',count)
   end
 return value
-
 compareAndWrite: procedure expose lines1. lines2. values1. values2. matchedFile unmatchedFile matchedCount unmatchedCount
   parse arg count
   do i = 1 to count
@@ -229,21 +228,12 @@ compareAndWrite: procedure expose lines1. lines2. values1. values2. matchedFile 
   end
   say 'Total matched lines:' matchedCount
   say 'Total unmatched lines:' unmatchedCount
-
 return
-
 addFooter: procedure
   parse arg fileName, header
-  
-  /* Ensure proper line breaks by using a simple call to lineout */
   call lineout fileName, header
-
 return
-
 addHeader: procedure
   parse arg fileName, header
-  
-  /* Ensure proper line breaks by using a simple call to lineout */
   call lineout fileName, header
-
 return
