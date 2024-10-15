@@ -17,3 +17,5 @@ file1.txt      *10 SHIRE-NAME           PIC X(20).
 file1.txt      *10 SHIRE-NAME           PIC X(20).
 file1.txt      *10 SHIRE-NAME           PIC X(20).
 file1.txt      *10 SHIRE-NAME           PIC X(20).
+file1.txt      *10 SHIRE-NAME           PIC X(20).
+file1.txt      *10 SHIRE-NAME           PIC X(20).

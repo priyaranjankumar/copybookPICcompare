@@ -9,7 +9,7 @@
             88 SHIRETYPE-CITY   VALUE '2'.
        05 SHIRE-CODE1           PIC 9(3).
        05 SHIRE-CODE2           PIC 9(5).
-       05 SHIRE-ROAD            PIC S9(15) COMP-3.
+       05 SHIRE-ROAD            PIC S9(15) COMP.
        05 SHIRE-RIVER           PIC S9(15) COMP-3.
        05 SHIRE-BRIDGE          PIC S9(15) COMP-3.
    01  SHIRE-TOWN.
